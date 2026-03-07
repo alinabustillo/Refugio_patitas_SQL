@@ -60,6 +60,7 @@ CREATE TABLE VACUNAS (
     nombre_vacuna VARCHAR(50) NOT NULL, -- Nombre comercial
     principio_activo VARCHAR(100),
     lote VARCHAR(50) NOT NULL,
+    stock INT NOT NULL,
     id_laboratorio INT NOT NULL,
     PRIMARY KEY (id_vacuna),
     FOREIGN KEY (id_laboratorio) REFERENCES LABORATORIOS(id_laboratorio)
@@ -111,5 +112,6 @@ CREATE TABLE HISTORIA_CLINICA (
     FOREIGN KEY (id_veterinario) REFERENCES VETERINARIOS(id_veterinario),
     FOREIGN KEY (id_vacuna) REFERENCES VACUNAS(id_vacuna)
 );
+
 
 
