@@ -71,8 +71,8 @@ CREATE TABLE VACUNAS (
 CREATE TABLE ANIMALES (
     id_animal INT AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
-    fecha_ingreso DATE NOT NULL,
     sexo VARCHAR(50) NOT NULL,
+    fecha_ingreso DATE NOT NULL,
     fecha_nacimiento DATE,   
     peso DECIMAL(5,2),
     castrado VARCHAR(2),
@@ -113,6 +113,7 @@ CREATE TABLE HISTORIA_CLINICA (
     FOREIGN KEY (id_veterinario) REFERENCES VETERINARIOS(id_veterinario),
     FOREIGN KEY (id_vacuna) REFERENCES VACUNAS(id_vacuna)
 );
+
 
 
 
