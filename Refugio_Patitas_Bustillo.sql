@@ -42,7 +42,7 @@ CREATE TABLE ADOPTANTES (
     nombre VARCHAR(50) NOT NULL,
     apellido VARCHAR(50) NOT NULL,
     dni VARCHAR(15) NOT NULL,
-    edad INT NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
     telefono VARCHAR(20) NOT NULL,
     direccion VARCHAR(150) NOT NULL,
     email VARCHAR(100),
@@ -113,6 +113,7 @@ CREATE TABLE HISTORIA_CLINICA (
     FOREIGN KEY (id_veterinario) REFERENCES VETERINARIOS(id_veterinario),
     FOREIGN KEY (id_vacuna) REFERENCES VACUNAS(id_vacuna)
 );
+
 
 
 
