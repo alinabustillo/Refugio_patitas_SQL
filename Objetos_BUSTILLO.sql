@@ -2,19 +2,32 @@ USE refugio_patitas;
 
 -- 1. FUNCIONES
 
--- Función 1: Calcular la edad exacta del animal
+-- Función 1: Calcular la edad detallada (años o meses)
+DROP FUNCTION IF EXISTS f_calcular_edad;
 DELIMITER //
 CREATE FUNCTION f_calcular_edad(fecha_nac DATE) 
-RETURNS INT
+RETURNS VARCHAR(20)
 DETERMINISTIC
 BEGIN
-    DECLARE edad INT;
-    SET edad = TIMESTAMPDIFF(YEAR, fecha_nac, CURRENT_DATE());
-    RETURN edad;
+    DECLARE anos INT;
+    DECLARE meses INT;
+    
+    -- Calcular ambos valores
+    SET anos = TIMESTAMPDIFF(YEAR, fecha_nac, CURRENT_DATE());
+    SET meses = TIMESTAMPDIFF(MONTH, fecha_nac, CURRENT_DATE());
+    
+    -- Si tiene 1 año o más, se van a mostrar años. 
+    -- Si tiene 0 años, se van a mostrar los meses.	
+    IF anos > 0 THEN
+        RETURN CONCAT(anos, ' años');
+    ELSE
+        RETURN CONCAT(meses, ' meses');
+    END IF;
 END //
 DELIMITER ;
 
 -- Función 2: Clasificar el tamaño del animal por su peso
+DROP FUNCTION IF EXISTS f_tamano_animal;
 DELIMITER //
 CREATE FUNCTION f_tamano_animal(peso_animal DECIMAL(5,2)) 
 RETURNS VARCHAR(20)
@@ -43,7 +56,7 @@ SELECT
     ra.tipo_animal AS tipo, 
     an.sexo,
     ra.nombre_raza AS raza,
-    an.peso,
+    CONCAT(an.peso, ' kg') AS peso,
     f_tamano_animal(an.peso) AS tamano,
     f_calcular_edad(an.fecha_nacimiento) AS edad
 FROM ANIMALES AS an
@@ -57,7 +70,7 @@ SELECT
     ra.tipo_animal AS tipo, 
     an.sexo,
     ra.nombre_raza AS raza,
-    an.peso,
+    CONCAT(an.peso, ' kg') AS peso,
     f_calcular_edad(an.fecha_nacimiento) AS edad
 FROM ANIMALES AS an
 JOIN RAZAS AS ra ON an.id_raza = ra.id_raza
@@ -94,6 +107,7 @@ JOIN LABORATORIOS AS l ON v.id_laboratorio = l.id_laboratorio;
 -- 3. PROCEDIMIENTOS 
 
 -- Procedimiento 1: Registra una adopción nueva y actualiza el estado.
+DROP PROCEDURE IF EXISTS sp_registrar_adopcion;
 DELIMITER //
 CREATE PROCEDURE sp_registrar_adopcion(
     IN p_id_animal INT, 
@@ -111,6 +125,7 @@ END //
 DELIMITER ;
 
 -- Procedimiento 2: Actualizacion del stock de vacunas ( se contempla el ingreso y egreso de stock)
+DROP PROCEDURE IF EXISTS sp_actualizar_stock_vacunas;
 DELIMITER //
 CREATE PROCEDURE sp_actualizar_stock_vacunas(
     IN p_id_vacuna INT, 
@@ -136,6 +151,7 @@ DELIMITER ;
 -- 4. TRIGGERS 
 
 -- Trigger 1: Validar edad del adoptante
+DROP TRIGGER IF EXISTS tr_validar_edad_adoptante;
 DELIMITER //
 CREATE TRIGGER tr_validar_edad_adoptante
 BEFORE INSERT ON ADOPTANTES
@@ -149,6 +165,7 @@ END //
 DELIMITER ;
 
 -- Trigger 2: Estandarizar nombre del animal a mayuscula
+DROP TRIGGER IF EXISTS tr_estandarizar_nombre_animal;
 DELIMITER //
 CREATE TRIGGER tr_estandarizar_nombre_animal
 BEFORE INSERT ON ANIMALES
@@ -159,6 +176,7 @@ END //
 DELIMITER ;
 
 -- Trigger 3: Auditoría de nuevos adoptantes , 
+DROP TRIGGER IF EXISTS tr_auditoria_nuevos_adoptantes;
 DELIMITER //
 CREATE TRIGGER tr_auditoria_nuevos_adoptantes
 AFTER INSERT ON ADOPTANTES
