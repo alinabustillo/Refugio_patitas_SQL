@@ -115,12 +115,18 @@ CREATE PROCEDURE sp_registrar_adopcion(
     IN p_detalle VARCHAR(500)
 )
 BEGIN
+    -- Iniciamos la transacción 
+    START TRANSACTION;
+    
     INSERT INTO ADOPCIONES (id_animal, id_adoptante, fecha_adopcion, detalle)
     VALUES (p_id_animal, p_id_adoptante, CURRENT_DATE(), p_detalle);
     
     UPDATE ANIMALES 
     SET estado = 'Adoptado'
     WHERE id_animal = p_id_animal;
+    
+    -- Guardamos los cambios definitivamente 
+    COMMIT;
 END //
 DELIMITER ;
 
