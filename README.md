@@ -1,4 +1,5 @@
 📝 Sobre el proyecto
+
 Proyecto final para el curso de SQL. Desarrollé una base de datos relacional en MySQL para un refugio de animales. El sistema permite organizar de forma integral y centralizada los ingresos, las fichas médicas (historia clínica y vacunación) y el registro seguro de las familias adoptantes. Además, incluye un modelo de análisis visual (Dashboard en Power BI) para la toma de decisiones.
 
 🗂️ Qué incluye este repositorio
